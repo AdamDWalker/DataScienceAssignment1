@@ -3,7 +3,12 @@
 training <- read.csv("ds_training.csv", header=TRUE, sep=",")
 View(ds_training)
 
+intall.packages("ggplot2")
+library(ggplot2)
 
+qplot(training$var3, training$var36)
+
+plot(training$ID, training$var15)
 
 #====// DATA PREP NOTES //====#
 
@@ -14,6 +19,7 @@ View(ds_training)
 #         Variable Categories?
 #           Integer and Numeric categrories
 #         Extreme/Missing values?
+#           Yes almost all of the fuckers
 
 #         DISTRIBUTIONS???
 #         Present findings - Tables/Plots
