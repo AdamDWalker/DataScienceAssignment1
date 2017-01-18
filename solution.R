@@ -1,12 +1,18 @@
 # This is the solution file to the CMP3036M Data Science Assignment 1.
 
-ds_training <- read.csv("ds_training.csv", header=FALSE)
+training <- read.csv("ds_training.csv", header=TRUE, sep=",")
 View(ds_training)
 
-# DATA PREP
+
+
+#====// DATA PREP NOTES //====#
+
 #     Data Exploring
 #         How many observations/variables
+#           371 Columns/Variable Types & 38010 Observations/Rows
+  
 #         Variable Categories?
+#           Integer and Numeric categrories
 #         Extreme/Missing values?
 
 #         DISTRIBUTIONS???
