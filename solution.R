@@ -3,7 +3,7 @@
 training <- read.csv("ds_training.csv", header=TRUE, sep=",")
 View(ds_training)
 
-intall.packages("ggplot2")
+install.packages("ggplot2")
 library(ggplot2)
 
 qplot(training$var3, training$var36)
