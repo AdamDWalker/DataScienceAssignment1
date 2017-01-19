@@ -1,14 +1,24 @@
 # This is the solution file to the CMP3036M Data Science Assignment 1.
 
 training <- read.csv("ds_training.csv", header=TRUE, sep=",")
-View(ds_training)
+View(training)
 
 install.packages("ggplot2")
 library(ggplot2)
 
-qplot(training$var3, training$var36)
+qplot(training$TARGET, training$var15)
 
-plot(training$ID, training$var15)
+zeroData = c()
+
+for(col in 1:NCOL(training))
+{
+  sum <- sum(as.numeric(training[,col]))
+  if(sum == 0)
+    zeroData <- c(zeroData, col)
+}
+
+newTrainData <- subset(training, select = -c(zeroData))
+
 
 #====// DATA PREP NOTES //====#
 
