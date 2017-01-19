@@ -19,6 +19,16 @@ for(col in 1:NCOL(training))
 
 newTrainData <- subset(training, select = -c(zeroData))
 
+testCol = c()
+for(row in 1:NROW(newTrainData))
+{
+  if(newTrainData$imp_op_var39_comer_ult1[row] == 0) testCol <- c(testCol, row)
+}
+
+newTestCol <- newTrainData[-testCol,]
+
+summary(newTestCol)
+
 
 #====// DATA PREP NOTES //====#
 
