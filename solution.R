@@ -8,26 +8,26 @@ library(ggplot2)
 
 qplot(training$TARGET, training$var15)
 
+testCol = c()
+for(row in 1:NROW(training))
+{
+  if(training$imp_op_var39_comer_ult1[row] == 0) testCol <- c(testCol, row)
+}
+
+trainSet2 <- training[-testCol,]
+
 zeroData = c()
 
-for(col in 1:NCOL(training))
+for(col in 1:NCOL(trainSet2))
 {
-  sum <- sum(as.numeric(training[,col]))
+  sum <- sum(as.numeric(trainSet2[,col]))
   if(sum == 0)
     zeroData <- c(zeroData, col)
 }
 
-newTrainData <- subset(training, select = -c(zeroData))
+trainSet3 <- subset(trainSet2, select = -c(zeroData))
 
-testCol = c()
-for(row in 1:NROW(newTrainData))
-{
-  if(newTrainData$imp_op_var39_comer_ult1[row] == 0) testCol <- c(testCol, row)
-}
-
-newTestCol <- newTrainData[-testCol,]
-
-summary(newTestCol)
+summary(trainSet3)
 
 
 #====// DATA PREP NOTES //====#
