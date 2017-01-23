@@ -39,7 +39,6 @@ ToSplit <- createDataPartition(training$TARGET, p = .7, list = FALSE)
 trainSet <- training[ToSplit,]
 testSet <- training[-ToSplit,]
 
-
 summary(training)
 
 # save target, remove target and ID - need ID for final thing
