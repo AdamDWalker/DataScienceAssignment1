@@ -12,8 +12,6 @@ library(FSelector)
 library(caret)
 
 target <- training$TARGET
-training$TARGET <- NULL
-training$ID <- NULL
 
 qplot(training$TARGET, training$var15)
 
@@ -35,13 +33,14 @@ weights <- subset(weights, weights!=0)
 training <- subset(training, select = rownames(weights))
 
 
-# Split the data 
+# Create Test and Training sets of data
+training[,"TARGET"] <- target
 ToSplit <- createDataPartition(training$TARGET, p = .7, list = FALSE)
 trainSet <- training[ToSplit,]
 testSet <- training[-ToSplit,]
 
 
-summary(trainSet3)
+summary(training)
 
 # save target, remove target and ID - need ID for final thing
 # Calculate weights - information gain for useful data
