@@ -30,6 +30,8 @@ trainSet3 <- subset(trainSet2, select = -c(zeroData))
 summary(trainSet3)
 
 
+#auc(trainData$TARGET,pred)
+
 #====// DATA PREP NOTES //====#
 
 #     Data Exploring
