@@ -12,19 +12,22 @@ qplot(training$TARGET, training$var15)
 
 zeroData = c()
 
-for(col in 1:NCOL(trainSet2))
+for(col in 1:NCOL(training))
 {
-  sum <- sum(as.numeric(trainSet2[,col]))
+  sum <- sum(as.numeric(training[,col]))
   if(sum == 0)
     zeroData <- c(zeroData, col)
 }
 
-trainSet3 <- subset(trainSet2, select = -c(zeroData))
+trainSet2 <- subset(training, select = -c(zeroData))
 
-information.gain(TARGET~., data = training)
 
-emptyAttribVals = c()
-for(row in 1:NROW())
+# Determine data weighting
+weights <- information.gain(TARGET~., data = training)
+weights <- subset(weights, weights!=0)
+training <- subset(training, select = rownames(weights))
+
+# 
 
 summary(trainSet3)
 
