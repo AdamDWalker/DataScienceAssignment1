@@ -5,6 +5,8 @@ View(training)
 
 install.packages("ggplot2")
 library(ggplot2)
+install.packages("FSelector")
+library(FSelector)
 
 qplot(training$TARGET, training$var15)
 
@@ -27,8 +29,19 @@ for(col in 1:NCOL(trainSet2))
 
 trainSet3 <- subset(trainSet2, select = -c(zeroData))
 
+information.gain(TARGET~., data = training)
+
+emptyAttribVals = c()
+for(row in 1:NROW())
+
 summary(trainSet3)
 
+# save target, remove target and ID - need ID for final thing
+# Calculate weights - information gain for useful data
+# Readd target to weighted data (17 variables)
+# split 70/30 for testing and training
+# make model
+# 
 
 #auc(trainData$TARGET,pred)
 
