@@ -10,14 +10,6 @@ library(FSelector)
 
 qplot(training$TARGET, training$var15)
 
-testCol = c()
-for(row in 1:NROW(training))
-{
-  if(training$imp_op_var39_comer_ult1[row] == 0) testCol <- c(testCol, row)
-}
-
-trainSet2 <- training[-testCol,]
-
 zeroData = c()
 
 for(col in 1:NCOL(trainSet2))
