@@ -4,9 +4,16 @@ training <- read.csv("ds_training.csv", header=TRUE, sep=",")
 View(training)
 
 install.packages("ggplot2")
-library(ggplot2)
 install.packages("FSelector")
+install.packages("caret")
+
+library(ggplot2)
 library(FSelector)
+library(caret)
+
+target <- training$TARGET
+training$TARGET <- NULL
+training$ID <- NULL
 
 qplot(training$TARGET, training$var15)
 
@@ -19,7 +26,7 @@ for(col in 1:NCOL(training))
     zeroData <- c(zeroData, col)
 }
 
-trainSet2 <- subset(training, select = -c(zeroData))
+training <- subset(training, select = -c(zeroData))
 
 
 # Determine data weighting
@@ -27,7 +34,12 @@ weights <- information.gain(TARGET~., data = training)
 weights <- subset(weights, weights!=0)
 training <- subset(training, select = rownames(weights))
 
-# 
+
+# Split the data 
+ToSplit <- createDataPartition(training$TARGET, p = .7, list = FALSE)
+trainSet <- training[ToSplit,]
+testSet <- training[-ToSplit,]
+
 
 summary(trainSet3)
 
