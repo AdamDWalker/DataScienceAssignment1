@@ -41,6 +41,14 @@ testSet <- training[-ToSplit,]
 
 summary(training)
 
+# Set seed for use of same model data
+
+set.seed(1)
+
+# GBM model
+
+modelThing <- trainControl(method = "cv", number = 10, classProbs = TRUE, summaryFunction = twoClassSummary)
+
 # save target, remove target and ID - need ID for final thing
 # Calculate weights - information gain for useful data
 # Readd target to weighted data (17 variables)
