@@ -1,61 +1,69 @@
 # This is the solution file to the CMP3036M Data Science Assignment 1.
 
-training <- read.csv("ds_training.csv", header=TRUE, sep=",")
-View(training)
-
-install.packages("ggplot2")
-install.packages("FSelector")
-install.packages("caret")
-install.packages("pROC")
-
-library(ggplot2)
-library(FSelector)
-library(caret)
-library(pROC)
-
-target <- training$TARGET
-
-qplot(training$TARGET, training$var15)
-
-zeroData = c()
-
-for(col in 1:NCOL(training))
-{
-  sum <- sum(as.numeric(training[,col]))
-  if(sum == 0)
-    zeroData <- c(zeroData, col)
-}
-
-training <- subset(training, select = -c(zeroData))
-
-
-# Determine data weighting
-weights <- information.gain(TARGET~., data = training)
-weights <- subset(weights, weights!=0)
-training <- subset(training, select = rownames(weights))
+  #
+    training <- read.csv("ds_training.csv", header=TRUE, sep=",")
+    View(training)
+  
+  # Install R packages for doing stuff
+    
+    install.packages("ggplot2")
+    install.packages("FSelector")
+    install.packages("caret")
+    install.packages("pROC")
+    
+    library(ggplot2)
+    library(FSelector)
+    library(caret)
+    library(pROC)
+    
+    target <- training$TARGET
+    
+    qplot(training$TARGET, training$var15)
+    
+    zeroData = c()
+    
+    for(col in 1:NCOL(training))
+    {
+      sum <- sum(as.numeric(training[,col]))
+      if(sum == 0)
+        zeroData <- c(zeroData, col)
+    }
+  
+    training <- subset(training, select = -c(zeroData))
 
 
-# Create Test and Training sets of data
-#training[,"TARGET"] <- target
-training$TARGET <- ifelse(target==1, "One", "Zero")
-ToSplit <- createDataPartition(training$TARGET, p = .7, list = FALSE)
-trainSet <- training[ToSplit,]
-testSet <- training[-ToSplit,]
+  # Determine data weighting
+    
+    weights <- information.gain(TARGET~., data = training)
+    weights <- subset(weights, weights!=0)
+    training <- subset(training, select = rownames(weights))
+  
+  
+  # Create Test and Training sets of data
+  #training[,"TARGET"] <- target
+    
+    training$TARGET <- ifelse(target==1, "One", "Zero")
+    ToSplit <- createDataPartition(training$TARGET, p = .7, list = FALSE)
+    trainSet <- training[ToSplit,]
+    testSet <- training[-ToSplit,]
+    
+    summary(training)
+  
+  # Set seed for use of same data for models
+  
+    set.seed(1)
 
-summary(training)
+  # GBM model
+  
+    GBMControl <- trainControl(method = "cv", number = 10, classProbs = TRUE, summaryFunction = twoClassSummary)
+  
+    GBMFit <- train(as.factor(TARGET)~., data = trainSet, method = "gbm", metric = "ROC", trControl = GBMControl)
+  
+    GBMPredict <- predict(GBMFit, testSet, type = "prob")
+    plot(GBMPredict)
 
-# Set seed for use of same model data
+# 
 
-set.seed(1)
-
-# GBM model
-
-GBMControl <- trainControl(method = "cv", number = 10, classProbs = TRUE, summaryFunction = twoClassSummary)
-
-GBMFit <- train(as.factor(TARGET)~., data = trainSet, method = "gbm", metric = "ROC", trControl = GBMControl)
-
-GBMPredict <- predict(GBMFit, testSet, type = "prob")
-plot(GBMPredict)
 # save target, remove target and ID - need ID for final thing
 # Calculate weights - information gain for useful data
 # Readd target to weighted data (17 variables)
