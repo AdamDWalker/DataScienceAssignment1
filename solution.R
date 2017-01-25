@@ -22,6 +22,8 @@
     
     target <- training$TARGET
     
+    summary(training)
+    
     qplot(training$TARGET, training$var15)
     
     zeroData = c()
@@ -86,7 +88,7 @@
     
     BLRPredict <- predict(BLRFit, testSet, type = "prob")
     auc(testSet$TARGET, BLRPredict[,1])
-    plot(BLRPredict)
+    plot(BLRPredict, main = "BLR Predictor")
     
   # Naive Bayes Model
     
@@ -96,7 +98,7 @@
     NBPredict <- predict(NBFit, testSet, type = "prob")
     
     auc(testSet$TARGET, NBPredict[,1])
-    plot(NBPredict)
+    plot(NBPredict, main = "Naive Bayes Predictor")
     
   # ROC Line Curves
     
@@ -111,6 +113,19 @@
     plot(GLMLine, col = "Blue", add = TRUE)
     plot(BLRLine, col = "Green", add = TRUE)
     plot(NBLine, col = "Yellow", add = TRUE)
+    
+  # Apply to test data
+    ds_test <- read.csv("~/GitHub/datascienceassignment1/ds_test.csv")
+    View(ds_test)
+    
+    finalDataControl <- trainControl(method = "cv", number = 10, classProbs = TRUE, summaryFunction = twoClassSummary)
+    finalDataFit <- train(as.factor(TARGET)~., data = trainSet, method = "gbm", metric = "ROC", trControl = finalDataControl)
+    
+    finalDataPredict <- predict(finalDataFit, ds_test, type = "prob")
+    
+    output <- data.frame(ds_test$ID, round(finalDataPredict[,1]))
+    colnames(output) <- c("ID", "TARGET")
+    write.csv(output, file = "ds_submission_11357886.csv", row.names = FALSE)
 
 # save target, remove target and ID - need ID for final thing
 # Calculate weights - information gain for useful data
