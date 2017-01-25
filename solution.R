@@ -60,9 +60,20 @@
     GBMFit <- train(as.factor(TARGET)~., data = trainSet, method = "gbm", metric = "ROC", trControl = GBMControl)
   
     GBMPredict <- predict(GBMFit, testSet, type = "prob")
+    auc(testSet$TARGET, GBMPredict[,1])
     plot(GBMPredict)
 
-# 
+  # GLM Model
+    
+    GLMControl <- trainControl(method = "cv", number = 10, classProbs = TRUE, summaryFunction = twoClassSummary)
+    
+    GLMFit <- train(as.factor(TARGET)~., data = trainSet, method = "glm", metric = "ROC", trControl = GLMControl)
+    
+    GLMPredict <- predict(GBMFit, testSet, type = "prob")
+    
+    auc(testSet$TARGET, GLMPredict[,1])
+    plot(GLMPredict)
+    
 
 # save target, remove target and ID - need ID for final thing
 # Calculate weights - information gain for useful data
