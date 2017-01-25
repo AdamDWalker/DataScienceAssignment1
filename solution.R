@@ -1,6 +1,6 @@
 # This is the solution file to the CMP3036M Data Science Assignment 1.
 
-  #
+  # Load in the training dataset
     training <- read.csv("ds_training.csv", header=TRUE, sep=",")
     View(training)
   
@@ -69,7 +69,7 @@
     
     GLMFit <- train(as.factor(TARGET)~., data = trainSet, method = "glm", metric = "ROC", trControl = GLMControl)
     
-    GLMPredict <- predict(GBMFit, testSet, type = "prob")
+    GLMPredict <- predict(GLMFit, testSet, type = "prob")
     
     auc(testSet$TARGET, GLMPredict[,1])
     plot(GLMPredict)
