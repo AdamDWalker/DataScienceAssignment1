@@ -6,10 +6,12 @@ View(training)
 install.packages("ggplot2")
 install.packages("FSelector")
 install.packages("caret")
+install.packages("pROC")
 
 library(ggplot2)
 library(FSelector)
 library(caret)
+library(pROC)
 
 target <- training$TARGET
 
@@ -35,7 +37,7 @@ training <- subset(training, select = rownames(weights))
 
 # Create Test and Training sets of data
 #training[,"TARGET"] <- target
-training$TARGET <- ifelse(target=1, "One", "Zero")
+training$TARGET <- ifelse(target==1, "One", "Zero")
 ToSplit <- createDataPartition(training$TARGET, p = .7, list = FALSE)
 trainSet <- training[ToSplit,]
 testSet <- training[-ToSplit,]
@@ -52,7 +54,8 @@ GBMControl <- trainControl(method = "cv", number = 10, classProbs = TRUE, summar
 
 GBMFit <- train(as.factor(TARGET)~., data = trainSet, method = "gbm", metric = "ROC", trControl = GBMControl)
 
-
+GBMPredict <- predict(GBMFit, testSet, type = "prob")
+plot(GBMPredict)
 # save target, remove target and ID - need ID for final thing
 # Calculate weights - information gain for useful data
 # Readd target to weighted data (17 variables)
