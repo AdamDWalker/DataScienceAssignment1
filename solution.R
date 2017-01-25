@@ -74,6 +74,14 @@
     auc(testSet$TARGET, GLMPredict[,1])
     plot(GLMPredict)
     
+  # ROC Line Curves
+    
+    GBMLine <- roc(testSet$TARGET, GBMPredict[,1])
+    GLMLine <- roc(testSet$TARGET, GLMPredict[,1])
+    
+  # Plot ROC Curves
+    plot(GBMLine, col = "Red")
+    plot(GLMLine, col = "Blue", add = TRUE)
 
 # save target, remove target and ID - need ID for final thing
 # Calculate weights - information gain for useful data
