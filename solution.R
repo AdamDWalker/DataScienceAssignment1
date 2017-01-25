@@ -34,7 +34,8 @@ training <- subset(training, select = rownames(weights))
 
 
 # Create Test and Training sets of data
-training[,"TARGET"] <- target
+#training[,"TARGET"] <- target
+training$TARGET <- ifelse(target=1, "One", "Zero")
 ToSplit <- createDataPartition(training$TARGET, p = .7, list = FALSE)
 trainSet <- training[ToSplit,]
 testSet <- training[-ToSplit,]
@@ -47,7 +48,10 @@ set.seed(1)
 
 # GBM model
 
-modelThing <- trainControl(method = "cv", number = 10, classProbs = TRUE, summaryFunction = twoClassSummary)
+GBMControl <- trainControl(method = "cv", number = 10, classProbs = TRUE, summaryFunction = twoClassSummary)
+
+GBMFit <- train(as.factor(TARGET)~., data = trainSet, method = "gbm", metric = "ROC", trControl = GBMControl)
+
 
 # save target, remove target and ID - need ID for final thing
 # Calculate weights - information gain for useful data
