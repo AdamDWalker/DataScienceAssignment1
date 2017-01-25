@@ -11,12 +11,14 @@
     install.packages("caret")
     install.packages("pROC")
     install.packages("caTools")
+    install.packages("klaR")
     
     library(ggplot2)
     library(FSelector)
     library(caret)
     library(pROC)
     library(caTools)
+    library(klaR)
     
     target <- training$TARGET
     
@@ -80,22 +82,35 @@
     
     BLRControl <- trainControl(method = "cv", number = 10, classProbs = TRUE, summaryFunction = twoClassSummary)
     
-    BLRFit <- train(as.factor(TARGET)~., data = trainSet, method = "LogitBoost", metric = "ROC", trControl, BLRControl)
+    BLRFit <- train(as.factor(TARGET)~., data = trainSet, method = "LogitBoost", metric = "ROC", trControl = BLRControl)
     
     BLRPredict <- predict(BLRFit, testSet, type = "prob")
     auc(testSet$TARGET, BLRPredict[,1])
     plot(BLRPredict)
+    
+  # Naive Bayes Model
+    
+    NBControl <- trainControl(method = "cv", number = 10, classProbs = TRUE, summaryFunction = twoClassSummary)
+    
+    NBFit <- train(as.factor(TARGET)~., data = trainSet, method = "nb", metric = "ROC", trControl = NBControl)
+    
+    NBPredict <- predict(NBFit, testSet, type = "prob")
+    auc(testSet$TARGET, NBPredict[,1])
+    plot(NBPredict)
     
   # ROC Line Curves
     
     GBMLine <- roc(testSet$TARGET, GBMPredict[,1])
     GLMLine <- roc(testSet$TARGET, GLMPredict[,1])
     BLRLine <- roc(testSet$TARGET, BLRPredict[,1])
+    NBLine <- roc(testSet$TARGET, NBPredict[,1])
     
   # Plot ROC Curves
+    
     plot(GBMLine, col = "Red")
     plot(GLMLine, col = "Blue", add = TRUE)
     plot(BLRLine, col = "Green", add = TRUE)
+    plot(NBLine, col = "Yellow", add = TRUE)
 
 # save target, remove target and ID - need ID for final thing
 # Calculate weights - information gain for useful data
