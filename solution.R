@@ -30,7 +30,7 @@
     {
       sum <- sum(as.numeric(training[,col]))
       if(sum == 0)
-        zeroData <- c(zeroData, col)
+        zeroData <- c(zeroData, col) 
     }
   
     training <- subset(training, select = -c(zeroData))
@@ -65,7 +65,7 @@
   
     GBMPredict <- predict(GBMFit, testSet, type = "prob")
     auc(testSet$TARGET, GBMPredict[,1])
-    plot(GBMPredict)
+    plot(GBMPredict, main = "GBM Predictor")
 
   # GLM Model
     
@@ -76,7 +76,7 @@
     GLMPredict <- predict(GLMFit, testSet, type = "prob")
     
     auc(testSet$TARGET, GLMPredict[,1])
-    plot(GLMPredict)
+    plot(GLMPredict, main = "GLM Predictor")
     
   # Boosted Logistic Regression Model
     
@@ -91,10 +91,10 @@
   # Naive Bayes Model
     
     NBControl <- trainControl(method = "cv", number = 10, classProbs = TRUE, summaryFunction = twoClassSummary)
-    
     NBFit <- train(as.factor(TARGET)~., data = trainSet, method = "nb", metric = "ROC", trControl = NBControl)
     
     NBPredict <- predict(NBFit, testSet, type = "prob")
+    
     auc(testSet$TARGET, NBPredict[,1])
     plot(NBPredict)
     
@@ -119,7 +119,6 @@
 # make model
 # 
 
-#auc(trainData$TARGET,pred)
 
 #====// DATA PREP NOTES //====#
 
